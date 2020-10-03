@@ -2,12 +2,16 @@ from models import Artist, Artwork
 from unittest import TestCase
 from peewee import SqliteDatabase, IntegrityError
 
+
+MEMORY = True
+db = ":memory:" if MEMORY else "test.db.sqlite"
+
 # test setup from peewee
 # http://docs.peewee-orm.com/en/latest/peewee/database.html?highlight=testing#testing-peewee-applications
 MODELS = [Artist, Artwork]
 
 # use an in-memory SQLite for tests.
-test_db = SqliteDatabase(':memory:')
+test_db = SqliteDatabase(db)
 
 
 class TestArtist(TestCase):
