@@ -86,13 +86,29 @@ class TestArtwork(TestCase):
         # Close connection to db.
         test_db.close()
 
-        # If we wanted, we could re-bind the models to their original
-        # database here. But for tests this is probably not necessary.
-
     def test_artwork_created(self):
         name = "painting"
         price = 100
         artwork = Artwork.create(artist=self.artist, name=name, price=price, sold=False)
-        self.assertTrue
+        self.assertTrue(artwork.name == "painting")
 
- 
+    def test_artwork_repects_unique_name(self):
+        name = "painting"
+        price = 100
+        Artwork.create(artist=self.artist, name=name, price=price, sold=False)
+        with self.assertRaises(IntegrityError):
+          Artwork.create(artist=self.artist, name=name, price=price, sold=False)
+
+    def test_artwork_repects_foreign_key_constraint(self):
+        name = "painting"
+        price = 100
+        with self.assertRaises(IntegrityError):
+          Artwork.create(name=name, price=price, sold=False)
+
+    def test_artwork_can_be_retrieved_by_user(self):
+        name = "paintings"
+        price = 100.24
+        Artwork.create(artist=self.artist, name=name, price=price, sold=False)
+        Artwork.create(artist=self.artist, name=f"{name}1", price=price, sold=False)
+        Artwork.create(artist=self.artist, name=f"{name}2", price=price, sold=False)
+        self.assertEqual(len(self.artist.artworks), 3)
