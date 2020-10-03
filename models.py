@@ -16,8 +16,8 @@ class Artist(Model):
 
 class Artwork(Model):
     artist = ForeignKeyField(Artist, backref='artworks')
-    name = CharField(null=False)
-    price = IntegerField(null=False)
+    name = CharField(unique=True, null=False)
+    price = IntegerField(null=False, default=0)
     sold = BooleanField(null=False)
 
     class Meta:
