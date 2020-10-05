@@ -2,36 +2,12 @@ from models import Artwork, Artist
 from peewee import SqliteDatabase, IntegrityError
 import artist
 import artwork
-db = SqliteDatabase('art.sqlite')
 import ui
+from menu import Menu
 
-class Menu():
-    """
-    stores options in datastructures for easy retreival
-    """
-    def __init__(self):
-        self.options = {}
-        self.text = {}
-        self.functions = {}
+db = SqliteDatabase('art.sqlite')
 
-    def add(self, key, text, function):
-        self.text[key] = text
-        self.functions[key] = function
-
-    def show(self):
-      print()
-      for key in self.text.keys():
-          print(f"{key}: {self.text[key]}")
-
-    def get(self, key):
-      if key in self.text.keys():
-          return self.functions[key]
-      else:
-          print(f"option \"{key}\" doesn't exist")
-          return False
-
-def main():
-    db.create_tables([Artist, Artwork])
+def build_menu():
     menu = Menu()
     menu.add("1", 'Add an Artist', artist.create)
     menu.add("2", 'View all Artists', artist.show_all)
@@ -46,12 +22,18 @@ def main():
     menu.add("12", 'Show all available Artwork by artist', artwork.show_all_available_by_artist)
     menu.add("13", 'Show all sold Artwork by artist', artwork.show_all_sold_by_artist)
     menu.add("q", 'quit', lambda: exit())
+    return menu
+
+def main():
+    db.create_tables([Artist, Artwork])
+    menu = build_menu()
     while True:
       menu.show()
       user_input = input('\nenter a menu option: ')
       option = menu.get(user_input)
       if option:
         option()
+
 
 if __name__ == "__main__":
     main()
