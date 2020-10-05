@@ -86,7 +86,7 @@ def get_by_id():
         artwork = Artwork.get(Artwork.id == id)
         ui.display(format_artwork(artwork))
         return artwork
-    except Exception as e:
+    except Exception:
         ui.display("Artwork does not exist")
 
 
