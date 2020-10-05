@@ -12,20 +12,18 @@ def create():
     name, email = get_name_and_email()
     artist = Artist.create(name=name, email= email)
     ui.display('Success')
-    ui.display(f"ID: {artist.id}\nName: {artist.name}\nEmail: {artist.email}")
-
+    ui.display(format_artist(artist))
   except IntegrityError:
     ui.display('Artist already exists')
 
 def show_all():
     artists = Artist.select()
     for artist in artists:
-        ui.display(f"ID: {artist.id}\nName: {artist.name}\nEmail: {artist.email}")
-
+        ui.display(format_artist(artist))
 def get_by_id():
     id = ui.get_positive_integer("Enter artist id: ")
     artist = Artist.get(Artist.id == id)
-    ui.display(f"ID: {artist.id}\nName: {artist.name}\nEmail: {artist.email}")
+    ui.display(format_artist(artist))
     return artist
 
 def update_by_id():
@@ -36,4 +34,7 @@ def update_by_id():
     artist.email = email
     artist.save()
     ui.display("Success")
-    ui.display(f"ID: {artist.id}\nName: {artist.name}\nEmail: {artist.email}")
+    ui.display(format_artist(artist))
+
+def format_artist(artist):
+  return f"ID: {artist.id}\nName: {artist.name}\nEmail: {artist.email}"
